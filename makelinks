@@ -27,6 +27,5 @@ apt-get $APT_ARGS -o APT::Get::Simulate=true update
 echo "Calculating new packages, download will start soon"
 
 apt-get $APT_ARGS install -qq --print-uris \
-    `apt-get $APT_ARGS -o APT::Get::Simulate=true dist-upgrade |grep "^Inst " |cut -d ' ' -f2`
-     | sed "s,'\([^']*\)'.*,\1," > uris
+    `apt-get $APT_ARGS -o APT::Get::Simulate=true dist-upgrade |grep "^Inst " |cut -d ' ' -f2` > uris
 
