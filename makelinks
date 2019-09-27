@@ -20,12 +20,13 @@ cd debs
 
 APT_ARGS="-o Dir::Etc::SourceList=../sources.list \
     -o Dir::Etc::SourceParts=/nonexistent \
-    -o Dir::State::Lists=../lists \
-    -o APT::Get::Simulate=true" 
+    -o Dir::State::Lists=../lists"
 
-apt-get $APT_ARGS update
+apt-get $APT_ARGS -o APT::Get::Simulate=true update
 
 echo "Calculating new packages, download will start soon"
 
-apt-get $APT_ARGS download \
-    `apt-get $APT_ARGS dist-upgrade |grep "^Inst " |cut -d ' ' -f2`
+apt-get $APT_ARGS install -qq --print-uris \
+    `apt-get $APT_ARGS -o APT::Get::Simulate=true dist-upgrade |grep "^Inst " |cut -d ' ' -f2`
+     | sed "s,'\([^']*\)'.*,\1," > uris
+
